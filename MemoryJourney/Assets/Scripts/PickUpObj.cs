@@ -39,7 +39,7 @@ public class PickUpObj : MonoBehaviour
 
             RaycastHit hit;
 
-            if (Physics.Raycast(Playercenter.gameObject.transform.position, transform.forward, out hit, 100)) //&& hit.collider.gameObject.tag == tag)
+            if (Physics.Raycast(Playercenter.gameObject.transform.position, transform.forward, out hit, 100) && hit.collider.gameObject.tag == tag)
             {
                 PickObj = hit.collider.gameObject;
                 hit.rigidbody.useGravity = false;
