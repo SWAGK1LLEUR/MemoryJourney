@@ -13,6 +13,7 @@ namespace StarterAssets
 		public Vector2 lean;
 		public bool jump;
 		public bool sprint;
+		public bool pick;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -51,6 +52,12 @@ namespace StarterAssets
         {
 			LeanInput(value.Get<Vector2>());
         }
+
+		public void OnPick(InputValue value)
+        {
+			PickInput(value.isPressed);
+        }
+
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -80,6 +87,11 @@ namespace StarterAssets
         {
 			lean = newLeanDirection;
 		}
+		public void PickInput(bool newPickState)
+        {
+			pick = newPickState;
+
+        }
 
 #if !UNITY_IOS || !UNITY_ANDROID
 
