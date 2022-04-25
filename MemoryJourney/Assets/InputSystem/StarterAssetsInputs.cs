@@ -10,6 +10,7 @@ namespace StarterAssets
 		[Header("Character Input Values")]
 		public Vector2 move;
 		public Vector2 look;
+		public Vector2 lean;
 		public bool jump;
 		public bool sprint;
 
@@ -45,6 +46,11 @@ namespace StarterAssets
 		{
 			SprintInput(value.isPressed);
 		}
+
+		public void OnLean(InputValue value)
+        {
+			LeanInput(value.Get<Vector2>());
+        }
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -68,6 +74,11 @@ namespace StarterAssets
 		public void SprintInput(bool newSprintState)
 		{
 			sprint = newSprintState;
+		}
+
+		public void LeanInput(Vector2 newLeanDirection)
+        {
+			lean = newLeanDirection;
 		}
 
 #if !UNITY_IOS || !UNITY_ANDROID

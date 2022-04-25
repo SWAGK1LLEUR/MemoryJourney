@@ -50,9 +50,12 @@ namespace StarterAssets
 		public float TopClamp = 90.0f;
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
+		[Tooltip("How far in degrees you can lean left and right")]
+		public float leanAngleMax;
 
 		// cinemachine
 		private float _cinemachineTargetPitch;
+		[SerializeField] private Transform camPivot;
 
 		// player
 		private float _speed;
@@ -114,6 +117,24 @@ namespace StarterAssets
 
 		private void CameraRotation()
 		{
+			Vector2 pivot = _input.lean;
+			float angle = Vector3.Angle(CinemachineCameraTarget.transform.position - camPivot.position, Vector3.up);
+			if (pivot.x == 0 && angle != 0)
+			{
+				if(angle > 0)
+					CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * -0.01f);
+				else if(angle < 0)
+					CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * 0.01f);
+
+				angle = Vector3.Angle(CinemachineCameraTarget.transform.position - camPivot.position, Vector3.up);
+				if (angle > -0.2f && angle < 0.2f)
+					angle = 0;
+			}
+			else if (angle > -leanAngleMax && angle < leanAngleMax)
+			{
+				CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * pivot.x * 0.01f);
+			}
+
 			// if there is an input
 			if (_input.look.sqrMagnitude >= _threshold)
 			{
@@ -124,14 +145,16 @@ namespace StarterAssets
 				_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
 
 				// clamp our pitch rotation
-				_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+				if(angle == 0)
+					_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
 				// Update Cinemachine camera target pitch
-				CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+				if (angle == 0)
+					CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
 
 				// rotate the player left and right
 				transform.Rotate(Vector3.up * _rotationVelocity);
-			}
+			}			
 		}
 
 		private void Move()
