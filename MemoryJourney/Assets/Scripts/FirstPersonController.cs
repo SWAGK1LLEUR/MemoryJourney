@@ -53,9 +53,10 @@ namespace StarterAssets
 		[Tooltip("How far in degrees you can lean left and right")]
 		public float leanAngleMax;
 
-		// cinemachine
-		private float _cinemachineTargetPitch;
+		// cinemachine		
 		[SerializeField] private Transform camPivot;
+		private float _cinemachineTargetPitch;
+		private float pivotInverse;
 
 		// player
 		private float _speed;
@@ -121,10 +122,7 @@ namespace StarterAssets
 			float angle = Vector3.Angle(CinemachineCameraTarget.transform.position - camPivot.position, Vector3.up);
 			if (pivot.x == 0 && angle != 0)
 			{
-				if(angle > 0)
-					CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * -0.01f);
-				else if(angle < 0)
-					CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * 0.01f);
+				CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * pivotInverse * -0.01f);
 
 				angle = Vector3.Angle(CinemachineCameraTarget.transform.position - camPivot.position, Vector3.up);
 				if (angle > -0.2f && angle < 0.2f)
@@ -132,7 +130,8 @@ namespace StarterAssets
 			}
 			else if (angle > -leanAngleMax && angle < leanAngleMax)
 			{
-				CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * pivot.x * 0.01f);
+				CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * pivot.x * -0.01f);
+				pivotInverse = -pivot.x;
 			}
 
 			// if there is an input
