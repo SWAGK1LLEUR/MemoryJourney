@@ -16,9 +16,9 @@ TagManager:
   - 'Floor '
   - Wall
   - Player
-  - 
-  - 
-  - 
+  - Obstacles
+  - Ceiling
+  - Wall
   - 
   - 
   - 
