@@ -51,7 +51,7 @@
                     "id": "974d77fb-b3ab-4c1d-b6b8-50dae282f7da",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Hold"
                 }
             ],
             "bindings": [

@@ -55,8 +55,9 @@ namespace StarterAssets
 
 		// cinemachine		
 		[SerializeField] private Transform camPivot;
+		private Vector2 _cursorOldPos;
 		private float _cinemachineTargetPitch;
-		private float pivotInverse;
+		private float _pivotInverse;
 
 		// player
 		private float _speed;
@@ -122,7 +123,7 @@ namespace StarterAssets
 			float angle = Vector3.Angle(CinemachineCameraTarget.transform.position - camPivot.position, Vector3.up);
 			if (pivot.x == 0 && angle != 0)
 			{
-				CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * pivotInverse * -0.01f);
+				CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * _pivotInverse * -0.01f);
 
 				angle = Vector3.Angle(CinemachineCameraTarget.transform.position - camPivot.position, Vector3.up);
 				if (angle > -0.2f && angle < 0.2f)
@@ -131,7 +132,8 @@ namespace StarterAssets
 			else if (angle > -leanAngleMax && angle < leanAngleMax)
 			{
 				CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * pivot.x * -0.01f);
-				pivotInverse = -pivot.x;
+				_pivotInverse = -pivot.x;
+				_cursorOldPos = _input.look;
 			}
 
 			// if there is an input

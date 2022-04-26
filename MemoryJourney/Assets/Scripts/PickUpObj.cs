@@ -13,9 +13,11 @@ public class PickUpObj : MonoBehaviour
     [SerializeField] private GameObject PickRef;
     [SerializeField] private GameObject Playercenter;
     [SerializeField] private GameObject Playerhand;
+    [SerializeField] private GameObject PlayerLeftHand;
     [SerializeField] private Vector3 objPos;
     [SerializeField] private Quaternion objRot;
     [SerializeField] private string tag;
+
     private StarterAssetsInputs _input;
     void Start()
     {
@@ -35,12 +37,15 @@ public class PickUpObj : MonoBehaviour
         Debug.DrawRay(Playercenter.gameObject.transform.position, Playercenter.transform.forward);
         if (_input.pick && canPick)
         {
-            picking = true;
+            
 
             RaycastHit hit;
 
             if (Physics.Raycast(Playercenter.gameObject.transform.position, transform.forward, out hit, 100) && hit.collider.gameObject.tag == tag)
             {
+                picking = true;
+
+                
                 PickObj = hit.collider.gameObject;
                 hit.rigidbody.useGravity = false;
                 hit.rigidbody.isKinematic = true;
@@ -65,11 +70,11 @@ public class PickUpObj : MonoBehaviour
 
         if (!canPick)
         {
-            PickObj.GetComponent<Rigidbody>().useGravity = true;
-            PickObj.GetComponent<Rigidbody>().isKinematic = false;
-            PickObj.transform.parent = null;
-            PickObj.GetComponent<Collider>().isTrigger = false;
+
+            PickObj.transform.parent = PlayerLeftHand.transform;
+            PickObj.transform.position = PlayerLeftHand.transform.position;
             PickObj = PickRef;
+            canPick = true;
         }
 
     }

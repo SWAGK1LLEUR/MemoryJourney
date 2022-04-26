@@ -14,6 +14,8 @@ namespace StarterAssets
 		public bool jump;
 		public bool sprint;
 		public bool pick;
+		
+		
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -25,37 +27,66 @@ namespace StarterAssets
 #endif
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-		public void OnMove(InputValue value)
+		public void OnMove(InputAction.CallbackContext value)
 		{
-			MoveInput(value.Get<Vector2>());
+			Vector2 vec = value.ReadValue<Vector2>();
+			MoveInput(vec);
 		}
 
-		public void OnLook(InputValue value)
+		public void OnLook(InputAction.CallbackContext value)
 		{
 			if(cursorInputForLook)
 			{
-				LookInput(value.Get<Vector2>());
+				Vector2 vec = value.ReadValue<Vector2>();
+				LookInput(vec);
 			}
 		}
 
-		public void OnJump(InputValue value)
+		public void OnJump(InputAction.CallbackContext value)
 		{
-			JumpInput(value.isPressed);
+			if(value.started)
+            {
+				JumpInput(true);
+			}
+			else if(value.canceled)
+            {
+				JumpInput(false);
+
+
+			}
+			
 		}
 
-		public void OnSprint(InputValue value)
+		public void OnSprint(InputAction.CallbackContext value)
 		{
-			SprintInput(value.isPressed);
+			if(value.started)
+            {
+				SprintInput(true);
+			}
+			else if(value.canceled)
+            {
+				SprintInput(false);
+			}
 		}
 
-		public void OnLean(InputValue value)
+		public void OnLean(InputAction.CallbackContext value)
         {
-			LeanInput(value.Get<Vector2>());
+			Vector2 vec = value.ReadValue<Vector2>();
+			LeanInput(vec);
         }
 
-		public void OnPick(InputValue value)
+		public void OnPick(InputAction.CallbackContext value)
         {
-			PickInput(value.isPressed);
+			if(value.started)
+            {
+				PickInput(true);
+
+			}
+			else if(value.canceled)
+            {
+				PickInput(false);
+			}
+			
         }
 
 #else
