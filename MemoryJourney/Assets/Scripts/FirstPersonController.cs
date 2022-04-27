@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using EZCameraShake;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -53,11 +55,15 @@ namespace StarterAssets
 		[Tooltip("How far in degrees you can lean left and right")]
 		public float leanAngleMax;
 
-		// cinemachine		
+		// cinemachine
 		[SerializeField] private Transform camPivot;
 		private Vector2 _cursorOldPos;
 		private float _cinemachineTargetPitch;
 		private float _pivotInverse;
+		private bool _freezeCursor = false;
+
+		//Shake
+		private bool shakeInWaiting = false;
 
 		// player
 		private float _speed;
@@ -69,22 +75,28 @@ namespace StarterAssets
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
+		// Flash
+		[SerializeField] private Light _flash;
+
+		//Enemy
+		[SerializeField] private GameObject enemy;
+
 		private PlayerInput _playerInput;
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
-		private GameObject _mainCamera;
+		public GameObject _mainCamera;
 
 		private const float _threshold = 0.01f;
 		
 		private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
-
+		private bool IsPicking;
 		private void Awake()
 		{
 			// get a reference to our main camera
-			if (_mainCamera == null)
-			{
+			//if (_mainCamera == null)
+			//{
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-			}
+			//}
 		}
 
 		private void Start()
@@ -96,18 +108,32 @@ namespace StarterAssets
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
+
+			_flash.intensity = 0;
 		}
 
 		private void Update()
 		{
-			JumpAndGravity();
-			GroundedCheck();
-			Move();
+			
+			IsPicking = GetComponent<PickUpObj>().picking;
+
+			if(!IsPicking)
+            {
+				JumpAndGravity();
+				GroundedCheck();
+				Move();
+				Flash();
+				StartCoroutine(ShakeCam());
+			}
+
 		}
 
 		private void LateUpdate()
 		{
-			CameraRotation();
+			if(!IsPicking)
+            {
+				CameraRotation();
+			}
 		}
 
 		private void GroundedCheck()
@@ -128,39 +154,47 @@ namespace StarterAssets
 				angle = Vector3.Angle(CinemachineCameraTarget.transform.position - camPivot.position, Vector3.up);
 				if (angle > -0.2f && angle < 0.2f)
 					angle = 0;
+
+				_input.look = _cursorOldPos;
 			}
 			else if (angle > -leanAngleMax && angle < leanAngleMax)
 			{
 				CinemachineCameraTarget.transform.RotateAround(camPivot.position, CinemachineCameraTarget.transform.forward, leanAngleMax * pivot.x * -0.01f);
 				_pivotInverse = -pivot.x;
-				_cursorOldPos = _input.look;
+				if (_freezeCursor)
+				{
+					_freezeCursor = true;
+					_cursorOldPos = _input.look;
+				}
 			}
-
 			// if there is an input
 			if (_input.look.sqrMagnitude >= _threshold)
 			{
 				//Don't multiply mouse input by Time.deltaTime
 				float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-				
-				_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
-				_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
 
-				// clamp our pitch rotation
-				if(angle == 0)
+				if (angle == 0)
+				{
+					_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
+					_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
+
+
+					// clamp our pitch rotation
 					_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-				// Update Cinemachine camera target pitch
-				if (angle == 0)
+					// Update Cinemachine camera target pitch
 					CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
 
-				// rotate the player left and right
-				transform.Rotate(Vector3.up * _rotationVelocity);
-			}			
+					// rotate the player left and right
+					transform.Rotate(Vector3.up * _rotationVelocity);
+				
+				}
+			}
 		}
 		private void Move()
 		{
 			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+			float targetSpeed = /*_input.sprint ? SprintSpeed : */MoveSpeed;
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -218,11 +252,11 @@ namespace StarterAssets
 				}
 
 				// Jump
-				if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+				/*if (_input.jump && _jumpTimeoutDelta <= 0.0f)
 				{
 					// the square root of H * -2 * G = how much velocity needed to reach desired height
 					_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-				}
+				}*/
 
 				// jump timeout
 				if (_jumpTimeoutDelta >= 0.0f)
@@ -252,11 +286,47 @@ namespace StarterAssets
 			}
 		}
 
+		private void Flash()
+        {
+			if (_input.Flash)
+			{
+ 				_input.Flash = false;
+				StartCoroutine(FlashActive());
+			}
+		}
+
+		private IEnumerator FlashActive()
+        {
+			while(_flash.intensity < 2000)
+            {
+				_flash.intensity += 100; 
+				yield return null;
+            }
+			while (_flash.intensity > 0)
+			{
+				_flash.intensity -= 75;
+				yield return null;
+			}
+			_flash.intensity = 0;
+		}
+
 		private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
 		{
 			if (lfAngle < -360f) lfAngle += 360f;
 			if (lfAngle > 360f) lfAngle -= 360f;
 			return Mathf.Clamp(lfAngle, lfMin, lfMax);
+		}
+
+		private IEnumerator ShakeCam()
+		{
+			EnemyChasingAI script = enemy.GetComponent<EnemyChasingAI>();
+			if (!shakeInWaiting && Vector3.Distance(enemy.transform.position, this.transform.position) < script.ShakeRange)
+			{
+				shakeInWaiting = true;
+				yield return new WaitForSeconds(0.75f);
+				CameraShaker.Instance.ShakeOnce(Mathf.InverseLerp(script.ShakeRange, 0, Vector3.Distance(this.transform.position, enemy.transform.position)) * 2, 10, 0.1f, 0.5f);
+				shakeInWaiting = false;
+			}
 		}
 
 		private void OnDrawGizmosSelected()

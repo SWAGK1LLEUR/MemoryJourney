@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyChasingAI : MonoBehaviour
 {
-   
+
 
     //[SerializeField] private AnimationCurve curve;
     [SerializeField] private NavMeshAgent agent;
@@ -44,6 +44,9 @@ public class EnemyChasingAI : MonoBehaviour
     [SerializeField] private float soundTravelSpeed;
     [SerializeField] private int soundRepetition;
 
+    //Shake
+    [SerializeField] private float shakeRange;
+    [SerializeField] private float shakeDuration;
 
     private bool playerInChaseRange;
     private bool playerInAttackRange;
@@ -72,6 +75,8 @@ public class EnemyChasingAI : MonoBehaviour
     public Vector3 WalkPoint { get => walkPoint; set => walkPoint = value; }
     public bool FreeRoamingEnemy { get => freeRoamingEnemy; set => freeRoamingEnemy = value; }
     public Transform Spotter { get => spotter; set => spotter = value; }
+    public float ShakeRange { get => shakeRange; set => shakeRange = value; }
+    public float ShakeDuration { get => shakeDuration; set => shakeDuration = value; }
 
     // Start is called before the first frame update
     void Start()
@@ -90,8 +95,7 @@ public class EnemyChasingAI : MonoBehaviour
     }
 
     private void Update()
-    {
-        print(CurrentFloor);
+    {        
         lostSightTimer += Time.deltaTime;
         if(!IsChangingFloors)
         {
@@ -112,8 +116,7 @@ public class EnemyChasingAI : MonoBehaviour
             lineRenderer.startWidth = 0.15f;
             lineRenderer.endWidth = 0.15f;
             lineRenderer.positionCount = 0;
-        }
-
+        }        
     }
 
     // Update is called once per frame
@@ -132,7 +135,7 @@ public class EnemyChasingAI : MonoBehaviour
         //    AttackPlayer();        
 
         Spotter.LookAt(agent.pathEndPosition);
-    }
+    }    
 
     private void Patroling()
     {
