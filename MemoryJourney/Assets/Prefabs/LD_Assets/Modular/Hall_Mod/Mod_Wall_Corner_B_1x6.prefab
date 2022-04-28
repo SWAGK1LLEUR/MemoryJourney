@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4381331355775242686}
   - component: {fileID: 1957213084750931316}
   - component: {fileID: 6059864109252990195}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Mod_Wall_Corner_B_1x6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 11706081491076257}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.304257, y: 0.004183769, z: 36.93419}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
