@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3688674553272078500}
   - component: {fileID: 333009512741019393}
   - component: {fileID: 2556884787655732171}
+  - component: {fileID: 5831685362453298065}
   m_Layer: 0
   m_Name: Mod_Wall_A_2x6
   m_TagString: Untagged
@@ -81,3 +82,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &5831685362453298065
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4069878964628113950}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6773008370954221106, guid: 14fbdb352c339384d8e74e372ed7d5f1, type: 3}
