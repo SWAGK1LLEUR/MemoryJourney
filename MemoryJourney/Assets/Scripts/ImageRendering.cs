@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ImageRendering : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform imageSocket;
+    public SpriteRenderer image;
+    public Image canvas;
+
+    public void ShowImage(bool active)
     {
-        
+        image.enabled = active;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ShowCanvas(bool active)
     {
-        
+        canvas.enabled = active;
+    }
+
+    private void Update()
+    {
+        imageSocket.transform.LookAt(player.position);
     }
 }

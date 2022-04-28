@@ -2,6 +2,7 @@ using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PickUpObj : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class PickUpObj : MonoBehaviour
     public bool picking = false;
     [SerializeField] private GameObject PickObj;
     [SerializeField] private GameObject PutObj;
+    [SerializeField] private GameObject viewObj;
     [SerializeField] private GameObject Playercenter;
     [SerializeField] private GameObject Playerhand;
     [SerializeField] private GameObject PlayerLeftHand;
@@ -18,8 +20,14 @@ public class PickUpObj : MonoBehaviour
     [SerializeField] private GameObject ObjDesk;
     [SerializeField] private Quaternion objRot;
     [SerializeField] private string tag;
+    [SerializeField] private string tag2;
     [SerializeField] private float RotationSpeed;
     [SerializeField] private float DistancePictureDesk;
+    [SerializeField] private float DistanceSeeInteractibles;
+    private GameObject Inventory;
+    private List<ImageRendering> InteractibleEyeList;
+    private List<ImageRendering> InteractibleHandList;
+    private ImageRendering CamInteractible;
     private float ObjectPitch;
     private float ObjectYaw;
     private float distancehand;
@@ -28,41 +36,97 @@ public class PickUpObj : MonoBehaviour
     private StarterAssetsInputs _input;
     private bool SecondHandFull = false;
     private Vector3 OriginalPos = Vector3.zero;
+
+    // Interactibles
+    [SerializeField] private float interactibleDistance;
+
+    public bool HasCamera = false;
     void Start()
     {
+        InteractibleEyeList = new List<ImageRendering>();
+        InteractibleHandList = new List<ImageRendering>();
+
         _input = GetComponent<StarterAssetsInputs>();
         distancehand = Vector3.Distance(Camera.transform.position, Playerhand.transform.position);
         distanceLeftHand = Vector3.Distance(Camera.transform.position, PlayerLeftHand.transform.position);
-        
+        GameObject[] eyeObj = GameObject.FindGameObjectsWithTag(tag);
+        for(int i = 0; i < eyeObj.Length; ++i)
+        {
+            InteractibleEyeList.Add(eyeObj[i].GetComponent<ImageRendering>());
+        }
+        CamInteractible = GameObject.FindGameObjectWithTag(tag2).GetComponent<ImageRendering>();
+        //GameObject[] handObj = GameObject.FindGameObjectsWithTag("tag3");
+        //for (int i = 0; i < handObj.Length; ++i)
+        //{
+        //    InteractibleEyeList.Add(handObj[i].GetComponent<ImageRendering>());
+        //}
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        print(SecondHandFull);
         Vector3 resultingPosition = Camera.transform.position + Camera.transform.forward * distancehand;
         Playerhand.transform.position = resultingPosition;
-
-        Vector3 resultingPosition2 = Camera.transform.position + Camera.transform.forward * distanceLeftHand;
-        resultingPosition2 -= transform.right;
-         PlayerLeftHand.transform.position = resultingPosition2;
-
-
         RaycastHit hitcheck;
-
-
-        
+                
         objRot = transform.rotation;
-        
-        Debug.DrawRay(Playercenter.gameObject.transform.position, Playercenter.transform.forward);
+
+        for(int i = 0; i < InteractibleEyeList.Count; ++i)
+        {
+            if(Vector3.Distance(this.transform.position, InteractibleEyeList[i].transform.position) < DistanceSeeInteractibles)
+            {
+                InteractibleEyeList[i].ShowImage(true);
+            }
+            else
+            {
+                InteractibleEyeList[i].ShowImage(false);
+            }
+        }
+
+        for (int i = 0; i < InteractibleHandList.Count; ++i)
+        {
+            if (Vector3.Distance(this.transform.position, InteractibleHandList[i].transform.position) < DistanceSeeInteractibles)
+            {
+                InteractibleHandList[i].ShowImage(true);
+            }
+            else
+            {
+                InteractibleHandList[i].ShowImage(false);
+            }
+        }
+
+        if (Vector3.Distance(this.transform.position, CamInteractible.transform.position) < DistanceSeeInteractibles)
+        {
+            CamInteractible.ShowImage(true);
+        }
+        else
+        {
+            CamInteractible.ShowImage(false);
+        }
+
+        RaycastHit hit;
+        Debug.DrawRay(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward);
+        if (Physics.Raycast(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward, out hit, interactibleDistance) && (hit.collider.gameObject.tag == tag || hit.collider.gameObject.tag == tag2))
+        {
+            viewObj = hit.collider.gameObject;
+            ImageRendering type = viewObj.GetComponent<ImageRendering>();
+            type.ShowCanvas(true);
+        }
+        else
+        {
+            if(viewObj != null)
+            {
+                ImageRendering type = viewObj.GetComponent<ImageRendering>();
+                type.ShowCanvas(false);
+            }
+ 
+        }
+
+        //Debug.DrawRay(Playercenter.gameObject.transform.position, Playercenter.transform.forward, Color.magenta);
         if (_input.pick && canPick)
         {
-            
-
-            RaycastHit hit;
-
-            if (Physics.Raycast(Playercenter.gameObject.transform.position, transform.forward, out hit, 100) && hit.collider.gameObject.tag == tag)
+            if (Physics.Raycast(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward, out hit, interactibleDistance) && (hit.collider.gameObject.tag == tag || hit.collider.gameObject.tag == tag2))
             {
                 picking = true;
                 if(OriginalPos == Vector3.zero)
@@ -77,7 +141,7 @@ public class PickUpObj : MonoBehaviour
                 hit.transform.parent = gameObject.transform;
 
                 hit.transform.position = Playerhand.transform.position;
-               // StartCoroutine(lerpPosition(hit.collider.gameObject, hit.transform.position, Playerhand.transform.position, 0.001f));
+
                 hit.transform.rotation = objRot;
 
 
@@ -106,7 +170,7 @@ public class PickUpObj : MonoBehaviour
 
         }
 
-        if (!canPick && !SecondHandFull)
+        if (!canPick)
         {
 
             if (Vector3.Distance(ObjDesk.transform.position, PickObj.transform.position) < DistancePictureDesk)
@@ -117,85 +181,72 @@ public class PickUpObj : MonoBehaviour
                     if(children[i].transform.childCount == 0 && children[i].transform.tag == "Place")
                     {
                         PickObj.transform.parent = children[i].transform;
+                        PickObj.transform.tag = "Untagged";
                         PickObj.transform.position = children[i].transform.position;
                         
                         break;
                     }
                 }
-
+                Inventory = null;
 
 
             }
             else
             {
 
+                if(PickObj.transform.tag == "FlashObj")
+                {
+                    SecondHandFull = true;
+                    PickObj.transform.tag = "Untagged";
+                    PutObj = PickObj;
+                    PickObj = null;
+                    PutObj.transform.position = PlayerLeftHand.transform.position;
+                    HasCamera = true;
+                    OriginalPos = Vector3.zero;
+                }
+                else if(PickObj.transform.tag == "CanPick")
+                {
 
+                    if (Inventory == null)
+                    {
+                        PickObj.GetComponent<uiImage>().ShowImage(true);
+                        Inventory = PickObj;
+                        PickObj = null;
+                        Inventory.transform.position = new Vector3(999, 999, 999);
+                        OriginalPos = Vector3.zero;
+                    }
+                    else
+                    {
+                        PickObj.transform.position = OriginalPos;
+                        OriginalPos = Vector3.zero;
+                        PickObj.transform.parent = null;
+                        PickObj = null;
+                        OriginalPos = Vector3.zero;
 
-                SecondHandFull = true;
+                    }
 
-                PutObj = PickObj;
-                PickObj = null;
-                PutObj.transform.position = PlayerLeftHand.transform.position;
+                }
 
-                OriginalPos = Vector3.zero;
            
             }
             canPick = true;
         }
-        else if(!canPick && SecondHandFull)
-        {
-           
-            //PickObj.gameObject.GetComponent<Rigidbody>().useGravity = true;
-            //PickObj.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-            //PickObj.gameObject.GetComponent<Collider>().isTrigger = false;
-            PickObj.transform.position = OriginalPos;
-            //StartCoroutine(lerpPosition(PickObj, PickObj.transform.position, OriginalPos, 0.01f));
-            OriginalPos = Vector3.zero;
-            PickObj.transform.parent = null;
-            PickObj = null;
-            canPick = true;
-        }
 
-        if(_input.Put && SecondHandFull && !picking)
+        if(_input.Put && Inventory != null && !picking)
         {
             picking = true;
-            PickObj = PutObj;
-            PutObj = null;
+            PickObj = Inventory;
+            PickObj.GetComponent<uiImage>().ShowImage(false);
+            Inventory = null;
             SecondHandFull = false;
             PickObj.transform.position = Playerhand.transform.position;
             
-            //StartCoroutine(lerpPosition(PickObj, PickObj.transform.position, Playerhand.transform.position, 0.01f));
             PickObj.transform.rotation = objRot;
 
         }
 
 
-        if(SecondHandFull)
-        {
-            PutObj.transform.position = PlayerLeftHand.transform.position;
-
-        }
-
     }
-
-
-
-
-    IEnumerator lerpPosition(GameObject obj, Vector3 StartPos, Vector3 EndPos, float LerpTime)
-    {
-        float StartTime = Time.time;
-        float EndTime = StartTime + LerpTime;
-
-        while (Time.time < EndTime)
-        {
-            float timeProgressed = (Time.time - StartTime) / LerpTime;  // this will be 0 at the beginning and 1 at the end.
-            obj.transform.position = Vector3.Slerp(StartPos, EndPos, timeProgressed);
-
-            yield return new WaitForFixedUpdate();
-        }
-        obj.transform.position = EndPos;
-    }
-
 
 
 
