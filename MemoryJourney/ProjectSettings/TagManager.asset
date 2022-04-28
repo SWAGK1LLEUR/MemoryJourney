@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - CanPick
+  - Place
   layers:
   - Default
   - TransparentFX
@@ -16,9 +17,9 @@ TagManager:
   - 'Floor '
   - Wall
   - Player
-  - Obstacles
-  - Ceiling
-  - Wall
+  - 
+  - 
+  - 
   - 
   - 
   - 

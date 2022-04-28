@@ -14,8 +14,9 @@ namespace StarterAssets
 		public bool jump;
 		public bool sprint;
 		public bool pick;
-		
-		
+		public bool Put;
+		public bool Flash;
+		private float Timer;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -26,8 +27,13 @@ namespace StarterAssets
 		public bool cursorInputForLook = true;
 #endif
 
+        private void Update()
+        {
+			Timer += Time.deltaTime;
+        }
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-		public void OnMove(InputAction.CallbackContext value)
+        public void OnMove(InputAction.CallbackContext value)
 		{
 			Vector2 vec = value.ReadValue<Vector2>();
 			MoveInput(vec);
@@ -51,10 +57,7 @@ namespace StarterAssets
 			else if(value.canceled)
             {
 				JumpInput(false);
-
-
-			}
-			
+			}			
 		}
 
 		public void OnSprint(InputAction.CallbackContext value)
@@ -80,15 +83,32 @@ namespace StarterAssets
 			if(value.started)
             {
 				PickInput(true);
-
 			}
 			else if(value.canceled)
             {
 				PickInput(false);
-			}
-			
+			}			
         }
+		public void OnPut(InputAction.CallbackContext value)
+        {
+			if (value.started)
+			{
+				PutInput(true);
+			}
+			else if (value.canceled)
+			{
+				PutInput(false);
+			}
+		}
 
+		public void OnFlash(InputAction.CallbackContext value)
+        {
+			if (value.performed && Timer > 5.0f)
+			{
+				FlashInput(true);
+				Timer = 0;
+			}
+		}
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -121,8 +141,16 @@ namespace StarterAssets
 		public void PickInput(bool newPickState)
         {
 			pick = newPickState;
-
         }
+		public void PutInput(bool newPutState)
+        {
+			Put = newPutState;
+		}
+
+		public void FlashInput(bool newFlashState)
+        {
+			Flash = newFlashState;
+		}
 
 #if !UNITY_IOS || !UNITY_ANDROID
 

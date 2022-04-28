@@ -36,6 +36,9 @@ public class ChasingFOVEditor : Editor
             Handles.DrawWireCube(fov.PatrolPointOrigin, new Vector3(fov.WalkPointRange * 2, 0, fov.WalkPointRange * 2));
 
         Handles.DrawLine(fov.WalkPoint + new Vector3(0, 10, 0), fov.WalkPoint - new Vector3(0, 10, 0));
+
+        Handles.color = Color.magenta;
+        Handles.DrawWireArc(fov.Spotter.position, Vector3.up, Vector3.forward, 360, fov.ShakeRange);
     }
 
     private Vector3 DirFromAngle(float eulerY, float angle)
