@@ -962,10 +962,10 @@ MonoBehaviour:
   heightDetectionMax: 100
   minTimeBeforeAttack: 0.1
   maxTimeBeforeAttack: 0.5
-  additionalChasingSpeed: 2
+  additionalChasingSpeed: 1
   soundDetectionRange: 1
   chaseRange: 60
-  attackRange: 5
+  attackRange: 2
   soundSource: {fileID: 0}
   soundList: []
   minSoundTime: 0
@@ -987,7 +987,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1.1488464
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
