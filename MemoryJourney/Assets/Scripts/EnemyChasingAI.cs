@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class EnemyChasingAI : MonoBehaviour
 {
@@ -131,10 +132,8 @@ public class EnemyChasingAI : MonoBehaviour
         else
             Patroling();
 
-        //if (playerInAttackRange)
-        //    AttackPlayer();        
-
-        Spotter.LookAt(agent.pathEndPosition);
+        if (playerInAttackRange)
+            AttackPlayer();        
     }    
 
     private void Patroling()
@@ -202,9 +201,7 @@ public class EnemyChasingAI : MonoBehaviour
 
     private void AttackPlayer()
     {
-
-        agent.SetDestination(transform.position);
-        transform.LookAt(Player);
+        SceneManager.LoadScene(2, LoadSceneMode.Single);
     }
 
     private IEnumerator FOVRoutine()

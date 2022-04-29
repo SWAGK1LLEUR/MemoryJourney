@@ -37,7 +37,7 @@ public class CanPlayerSeeEnemy : MonoBehaviour
         {
             if (Physics.Linecast(c.transform.position, go.GetComponentInChildren<Renderer>().bounds.center, out hit))
             {
-                if(hit.collider.tag == "Kevin")
+                if(hit.collider.tag == "Kevin" && Vector3.Distance(transform.position, Enemy.transform.position) < 10)
                 {
                     return true;
                 }

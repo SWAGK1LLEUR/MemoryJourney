@@ -10,7 +10,7 @@ public class PickUpObj : MonoBehaviour
  
     private bool canPick = true;
     public bool picking = false;
-    [SerializeField] private GameObject PickObj;
+    [SerializeField] public GameObject PickObj;
     [SerializeField] private GameObject PutObj;
     [SerializeField] private GameObject viewObj;
     [SerializeField] private GameObject Playercenter;
@@ -24,7 +24,7 @@ public class PickUpObj : MonoBehaviour
     [SerializeField] private float RotationSpeed;
     [SerializeField] private float DistancePictureDesk;
     [SerializeField] private float DistanceSeeInteractibles;
-    private GameObject Inventory;
+    public GameObject Inventory;
     private List<ImageRendering> InteractibleEyeList;
     private List<ImageRendering> InteractibleHandList;
     private ImageRendering CamInteractible;
@@ -65,22 +65,37 @@ public class PickUpObj : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        Vector3 resultingPosition = Camera.transform.position + Camera.transform.forward * distancehand;
-        Playerhand.transform.position = resultingPosition;
+    
+        Vector3 resultingPosition = Camera.transform.position + Camera.transform.forward * distanceLeftHand;
+        //Playerhand.transform.position = resultingPosition;
+     //   PlayerLeftHand.transform.position = resultingPosition;
         RaycastHit hitcheck;
                 
         objRot = transform.rotation;
 
         for(int i = 0; i < InteractibleEyeList.Count; ++i)
         {
-            if(Vector3.Distance(this.transform.position, InteractibleEyeList[i].transform.position) < DistanceSeeInteractibles)
+            if (PickObj != null)
             {
-                InteractibleEyeList[i].ShowImage(true);
+                if (Vector3.Distance(this.transform.position, InteractibleEyeList[i].transform.position) < DistanceSeeInteractibles && InteractibleEyeList[i].transform.position != PickObj.transform.position)
+                {
+                    InteractibleEyeList[i].ShowImage(true);
+                }
+                else
+                {
+                    InteractibleEyeList[i].ShowImage(false);
+                }
             }
             else
             {
-                InteractibleEyeList[i].ShowImage(false);
+                if (Vector3.Distance(this.transform.position, InteractibleEyeList[i].transform.position) < DistanceSeeInteractibles)
+                {
+                    InteractibleEyeList[i].ShowImage(true);
+                }
+                else
+                {
+                    InteractibleEyeList[i].ShowImage(false);
+                }
             }
         }
 
@@ -107,21 +122,6 @@ public class PickUpObj : MonoBehaviour
 
         RaycastHit hit;
         Debug.DrawRay(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward);
-        if (Physics.Raycast(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward, out hit, interactibleDistance) && (hit.collider.gameObject.tag == tag || hit.collider.gameObject.tag == tag2))
-        {
-            viewObj = hit.collider.gameObject;
-            ImageRendering type = viewObj.GetComponent<ImageRendering>();
-            type.ShowCanvas(true);
-        }
-        else
-        {
-            if(viewObj != null)
-            {
-                ImageRendering type = viewObj.GetComponent<ImageRendering>();
-                type.ShowCanvas(false);
-            }
- 
-        }
 
         //Debug.DrawRay(Playercenter.gameObject.transform.position, Playercenter.transform.forward, Color.magenta);
         if (_input.pick && canPick)
@@ -183,6 +183,15 @@ public class PickUpObj : MonoBehaviour
                         PickObj.transform.parent = children[i].transform;
                         PickObj.transform.tag = "Untagged";
                         PickObj.transform.position = children[i].transform.position;
+                        for(int j = 0; j < InteractibleEyeList.Count; ++j)
+                        {
+                            if(PickObj.transform.position == InteractibleEyeList[j].transform.position)
+                            {
+                                InteractibleEyeList.Remove(InteractibleEyeList[j]);
+                                break;
+                            }
+
+                        }
                         
                         break;
                     }
@@ -245,9 +254,22 @@ public class PickUpObj : MonoBehaviour
 
         }
 
-
+        if (Physics.Raycast(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward, out hit, interactibleDistance) && (hit.collider.gameObject.tag == tag || hit.collider.gameObject.tag == tag2))
+        {
+            viewObj = hit.collider.gameObject;
+            if (PickObj != viewObj && Inventory != viewObj)
+            {
+                ImageRendering type = viewObj.GetComponent<ImageRendering>();
+                type.ShowCanvas(true);
+            }
+        }
+        else
+        {
+            if (viewObj != null)
+            {
+                ImageRendering type = viewObj.GetComponent<ImageRendering>();
+                type.ShowCanvas(false);
+            }
+        }
     }
-
-
-
 }
