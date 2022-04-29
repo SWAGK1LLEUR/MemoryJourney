@@ -71,6 +71,9 @@ namespace StarterAssets
 		private float _verticalVelocity;
 		private float _terminalVelocity = 53.0f;
 
+		//Sound
+		[SerializeField] private AudioSource footsteps;
+
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;

@@ -15,6 +15,6 @@ public class Death : MonoBehaviour
     private IEnumerator Next()
     {
         yield return new WaitForSeconds(1);
-        lvl.FadeInToNextLevel(0);
+        lvl.FadeInToNextLevel(1);
     }
 }

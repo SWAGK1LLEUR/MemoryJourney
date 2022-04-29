@@ -201,7 +201,7 @@ public class EnemyChasingAI : MonoBehaviour
 
     private void AttackPlayer()
     {
-        SceneManager.LoadScene(2, LoadSceneMode.Single);
+        SceneManager.LoadScene(3, LoadSceneMode.Single);
     }
 
     private IEnumerator FOVRoutine()

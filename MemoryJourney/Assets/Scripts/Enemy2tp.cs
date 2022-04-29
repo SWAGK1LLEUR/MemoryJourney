@@ -49,7 +49,7 @@ public class Enemy2tp : MonoBehaviour
             if (currentGazeTimeInSeconds >= holdGazeTimeInSeconds)
             {
                 currentGazeTimeInSeconds = 0;
-                SceneManager.LoadScene(1, LoadSceneMode.Single);
+                SceneManager.LoadScene(2, LoadSceneMode.Single);
 
             }
         }
