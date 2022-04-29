@@ -965,7 +965,7 @@ MonoBehaviour:
   additionalChasingSpeed: 1
   soundDetectionRange: 1
   chaseRange: 60
-  attackRange: 2
+  attackRange: 1
   soundSource: {fileID: 0}
   soundList: []
   minSoundTime: 0
