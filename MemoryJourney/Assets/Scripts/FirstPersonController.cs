@@ -78,13 +78,15 @@ namespace StarterAssets
 		// Flash
 		[SerializeField] private Light _flash;
 
-		//Enemy
+		// Enemy
 		[SerializeField] private GameObject enemy;
 
 		private PlayerInput _playerInput;
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		public GameObject _mainCamera;
+
+		
 
 		private const float _threshold = 0.01f;
 		
@@ -122,10 +124,13 @@ namespace StarterAssets
 				JumpAndGravity();
 				GroundedCheck();
 				Move();
-				Flash();
+				if(GetComponent<PickUpObj>().HasCamera)
+                {
+					Flash();
+				}
+				
 				StartCoroutine(ShakeCam());
 			}
-
 		}
 
 		private void LateUpdate()
