@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 2504696316180455853}
   - component: {fileID: 371141587129505127}
   - component: {fileID: 1362087027387402733}
+  - component: {fileID: 6869731969002843941}
   m_Layer: 0
   m_Name: Asset_Lampadairz
   m_TagString: Untagged
@@ -188,7 +189,21 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 0.20400001, y: 0.94400007, z: 0.20400001}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!64 &6869731969002843941
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2172550583206360242}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -9037393404867282207, guid: 259d05b269397344db8d91aba6686b9c, type: 3}

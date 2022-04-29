@@ -14,6 +14,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GA.unity
     guid: ab267fe92be1088419abb13f987f8197
+  - enabled: 1
+    path: Assets/Scenes/DeathSceneLittleBoy.unity
+    guid: 5c436a1cfc08d194b8e040ac9e5ee54d
+  - enabled: 1
+    path: Assets/Scenes/DeathSceneFatBoy.unity
+    guid: 12051d460286d584c89c86b03358e835
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bf1a12594d83151408638e873284bc4f, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: d9f1eebbeb36533478e69db465a76747, type: 2}
