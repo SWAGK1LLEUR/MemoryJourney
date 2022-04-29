@@ -144,7 +144,7 @@ Animator:
   m_GameObject: {fileID: 7110508037516384148}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 99ec3b82e1daabb438a5490800a4dee9, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5540ac6ef7cf9da4eb33d49b126aaf78, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7110508037516384148}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd30478b86c94604eb6f773fc761a082, type: 3}
+  m_Script: {fileID: 11500000, guid: 0647162ef51850542a0940dd7c7747dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fadeAnimator: {fileID: 2714737369191494492}
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7110508037516384148}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b0e8acc29e10af4585e8fa9518f6e1a, type: 3}
+  m_Script: {fileID: 11500000, guid: ba811a91a2e027648a546318a0ed41ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lvl: {fileID: 7110508037516384139}
