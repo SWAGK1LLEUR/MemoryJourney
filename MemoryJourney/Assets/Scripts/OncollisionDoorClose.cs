@@ -18,10 +18,11 @@ public class OncollisionDoorClose : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Vector3.Distance(Player.transform.position, transform.position) < 10)
+        if(Vector3.Distance(Player.transform.position, transform.position) < 5)
         {
             a = true;
             Enemy1.SetActive(false);
+            DoorToClose.SetActive(true);
         }
         else
         {

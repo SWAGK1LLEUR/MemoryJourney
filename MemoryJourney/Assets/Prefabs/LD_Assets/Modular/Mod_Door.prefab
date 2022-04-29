@@ -146,10 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aad1b020ff1c1dc45abddbd4074873f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 8108831290075351935, guid: eabb7678d6ecc1e47a05e703be8d082f, type: 3}
   imageSocket: {fileID: 6720831319677456694}
   image: {fileID: 3493306080474138252}
-  canvas: {fileID: 0}
+  canvas: {fileID: 2575569038101183659, guid: df358eeb1e0b14847b2b1b49d9d41127, type: 3}
 --- !u!1 &6892789274698483879
 GameObject:
   m_ObjectHideFlags: 0
