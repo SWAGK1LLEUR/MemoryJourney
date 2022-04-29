@@ -14,7 +14,7 @@ public class EnemyActiveManager : MonoBehaviour
     [SerializeField] private List<GameObject> DoorsAfterOnePhoto;
 
     [SerializeField] private List<GameObject> DoorsAftertwoPhoto;
-
+    
     [SerializeField] private List<GameObject> DoorsAfterthreePhoto;
     [SerializeField] private List<GameObject> DoorsAfterfourPhoto;
     [SerializeField] private GameObject ThirdPhotoEventPointEnemyone;
