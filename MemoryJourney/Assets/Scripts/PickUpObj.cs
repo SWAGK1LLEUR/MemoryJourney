@@ -59,7 +59,7 @@ public class PickUpObj : MonoBehaviour
         GameObject[] handObj = GameObject.FindGameObjectsWithTag(tag3);
         for (int i = 0; i < handObj.Length; ++i)
         {
-            InteractibleEyeList.Add(handObj[i].GetComponent<ImageRendering>());
+            InteractibleHandList.Add(handObj[i].GetComponent<ImageRendering>());
         }
     }
 
@@ -150,7 +150,7 @@ public class PickUpObj : MonoBehaviour
 
             if (Physics.Raycast(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward, out hit, interactibleDistance) && (hit.collider.gameObject.tag == tag3))
             {
-                Animator anim = hit.collider.gameObject.GetComponent<Animator>();
+                Animator anim = hit.collider.gameObject.GetComponentInParent<Animator>();
                 bool isOpen = anim.GetBool("Open");
                 anim.SetBool("Open", !isOpen);
             }
