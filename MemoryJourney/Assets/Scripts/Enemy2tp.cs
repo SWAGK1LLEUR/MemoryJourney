@@ -99,7 +99,7 @@ public class Enemy2tp : MonoBehaviour
     private IEnumerator Tp()
     {
         IsCounting = true;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(10);
 
         int i = FindPos();
 
