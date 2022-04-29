@@ -21,6 +21,7 @@ public class PickUpObj : MonoBehaviour
     [SerializeField] private Quaternion objRot;
     [SerializeField] private string tag;
     [SerializeField] private string tag2;
+    [SerializeField] private string tag3;
     [SerializeField] private float RotationSpeed;
     [SerializeField] private float DistancePictureDesk;
     [SerializeField] private float DistanceSeeInteractibles;
@@ -55,11 +56,11 @@ public class PickUpObj : MonoBehaviour
             InteractibleEyeList.Add(eyeObj[i].GetComponent<ImageRendering>());
         }
         CamInteractible = GameObject.FindGameObjectWithTag(tag2).GetComponent<ImageRendering>();
-        //GameObject[] handObj = GameObject.FindGameObjectsWithTag("tag3");
-        //for (int i = 0; i < handObj.Length; ++i)
-        //{
-        //    InteractibleEyeList.Add(handObj[i].GetComponent<ImageRendering>());
-        //}
+        GameObject[] handObj = GameObject.FindGameObjectsWithTag(tag3);
+        for (int i = 0; i < handObj.Length; ++i)
+        {
+            InteractibleEyeList.Add(handObj[i].GetComponent<ImageRendering>());
+        }
     }
 
     // Update is called once per frame
@@ -147,7 +148,12 @@ public class PickUpObj : MonoBehaviour
 
             }
 
-
+            if (Physics.Raycast(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward, out hit, interactibleDistance) && (hit.collider.gameObject.tag == tag3))
+            {
+                Animator anim = hit.collider.gameObject.GetComponent<Animator>();
+                bool isOpen = anim.GetBool("Open");
+                anim.SetBool("Open", !isOpen);
+            }
         }
 
         if(picking)

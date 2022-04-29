@@ -9,6 +9,7 @@ TagManager:
   - Place
   - Kevin
   - FlashObj
+  - Door
   layers:
   - Default
   - TransparentFX
