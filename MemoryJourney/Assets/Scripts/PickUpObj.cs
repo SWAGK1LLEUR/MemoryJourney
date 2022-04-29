@@ -37,6 +37,8 @@ public class PickUpObj : MonoBehaviour
     private StarterAssetsInputs _input;
     private bool SecondHandFull = false;
     private Vector3 OriginalPos = Vector3.zero;
+    public Image scope;
+    public Image hand;
 
     // Interactibles
     [SerializeField] private float interactibleDistance;
@@ -260,37 +262,59 @@ public class PickUpObj : MonoBehaviour
 
         }
 
-        if (Physics.Raycast(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward, out hit, interactibleDistance) && (hit.collider.gameObject.tag == tag || hit.collider.gameObject.tag == tag2))
+        if (Physics.Raycast(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward, out hit, interactibleDistance))
         {
-            viewObj = hit.collider.gameObject;
-            if (PickObj != viewObj && Inventory != viewObj)
+            if (hit.collider.gameObject.tag == tag || hit.collider.gameObject.tag == tag2)
             {
+                viewObj = hit.collider.gameObject;
+                if (PickObj != viewObj && Inventory != viewObj)
+                {
+                    ImageRendering type = viewObj.GetComponent<ImageRendering>();
+                    type.ShowCanvas(true);
+                }
+            }
+        }
+        else
+        {
+            if (hit.collider != null)
+            {
+                if (hit.collider.gameObject.tag == tag || hit.collider.gameObject.tag == tag2)
+                {
+                    if (viewObj != null)
+                    {
+                        ImageRendering type = viewObj.GetComponent<ImageRendering>();
+                        type.ShowCanvas(false);
+                    }
+                }
+            }
+            else
+                scope.enabled = false;
+        }
+
+        if (Physics.Raycast(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward, out hit, interactibleDistance))
+        {
+            if (hit.collider.gameObject.tag == tag3)
+            {
+                viewObj = hit.collider.gameObject;
                 ImageRendering type = viewObj.GetComponent<ImageRendering>();
                 type.ShowCanvas(true);
             }
         }
         else
         {
-            if (viewObj != null)
+            if (hit.collider != null)
             {
-                ImageRendering type = viewObj.GetComponent<ImageRendering>();
-                type.ShowCanvas(false);
+                if (hit.collider.gameObject.tag == tag3)
+                {
+                    if (viewObj != null)
+                    {
+                        ImageRendering type = viewObj.GetComponent<ImageRendering>();
+                        type.ShowCanvas(false);
+                    }
+                }
             }
-        }
-
-        if (Physics.Raycast(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward, out hit, interactibleDistance) && (hit.collider.gameObject.tag == tag3))
-        {
-            viewObj = hit.collider.gameObject;
-            ImageRendering type = viewObj.GetComponent<ImageRendering>();
-            type.ShowCanvas(true);
-        }
-        else
-        {
-            if (viewObj != null)
-            {
-                ImageRendering type = viewObj.GetComponent<ImageRendering>();
-                type.ShowCanvas(false);
-            }
+            else
+                hand.enabled = false;
         }
     }
 }

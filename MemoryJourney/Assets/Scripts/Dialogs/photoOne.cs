@@ -17,7 +17,7 @@ public class photoOne : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!a && Player.GetComponent<PickUpObj>().Inventory != null && Player.GetComponent<PickUpObj>().Inventory == this)
+        if(!a && Player.GetComponent<PickUpObj>().PickObj == this.gameObject)
         {
             audio.Play();
             a = true;
