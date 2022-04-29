@@ -30,7 +30,7 @@ public class EnemyChasePlayer2 : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(1, LoadSceneMode.Single);
+            SceneManager.LoadScene(3, LoadSceneMode.Single);
         }
 
     }
