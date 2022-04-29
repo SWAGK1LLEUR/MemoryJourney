@@ -73,6 +73,7 @@ namespace StarterAssets
 
 		//Sound
 		[SerializeField] private AudioSource footsteps;
+		[SerializeField] private AudioClip footstepSound;
 
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
@@ -209,6 +210,8 @@ namespace StarterAssets
 			// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 			// if there is no input, set the target speed to 0
 			if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+
+			StartCoroutine(Footsteps(targetSpeed));
 
 			// a reference to the players current horizontal velocity
 			float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
@@ -347,6 +350,13 @@ namespace StarterAssets
 
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
+		}
+
+		private IEnumerator Footsteps(float refe)
+        {
+			yield return new WaitForSeconds(3);
+			if(refe > 0)
+				footsteps.PlayOneShot(footstepSound);
 		}
 	}
 }
