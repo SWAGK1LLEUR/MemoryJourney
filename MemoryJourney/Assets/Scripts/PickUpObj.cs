@@ -277,5 +277,20 @@ public class PickUpObj : MonoBehaviour
                 type.ShowCanvas(false);
             }
         }
+
+        if (Physics.Raycast(Playercenter.gameObject.transform.position, Playercenter.gameObject.transform.forward, out hit, interactibleDistance) && (hit.collider.gameObject.tag == tag3))
+        {
+            viewObj = hit.collider.gameObject;
+            ImageRendering type = viewObj.GetComponent<ImageRendering>();
+            type.ShowCanvas(true);
+        }
+        else
+        {
+            if (viewObj != null)
+            {
+                ImageRendering type = viewObj.GetComponent<ImageRendering>();
+                type.ShowCanvas(false);
+            }
+        }
     }
 }
