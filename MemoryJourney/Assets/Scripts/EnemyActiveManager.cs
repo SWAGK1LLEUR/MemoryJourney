@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyActiveManager : MonoBehaviour
 {
     [SerializeField] private GameObject Enemy1;
+    [SerializeField] private GameObject DummyEnemy1;
     [SerializeField] private GameObject Enemy2;
     [SerializeField] private GameObject DummyEnemy2;
     [SerializeField] private GameObject Table;
@@ -24,6 +25,7 @@ public class EnemyActiveManager : MonoBehaviour
     List<Transform> a;
     private bool once = false;
     private int oldInt;
+    private bool OneTime = false;
     void Start()
     {
         Enemy1.SetActive(false);
@@ -74,12 +76,12 @@ public class EnemyActiveManager : MonoBehaviour
             }
 
         }
-        if(j == 2 && this.GetComponent<PickUpObj>().Inventory != null && Enemy1.activeInHierarchy == false && !doorClose.GetComponent<OncollisionDoorClose>().a)
+        if(j == 2 && this.GetComponent<PickUpObj>().Inventory != null && !doorClose.GetComponent<OncollisionDoorClose>().a && !OneTime)
         {
+            OneTime = true;
             once = true;
             Enemy1.SetActive(true);
-            Vector3 startpos = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
-            Enemy1.transform.position = startpos;
+            DummyEnemy1.SetActive(false);
             CallDummyEnemy2();
             DummyEnemy2.GetComponent<Enemy2tp>().ChangeTodummy();
             for (int i = 0; i < DoorsAfterthreePhoto.Count; ++i)
