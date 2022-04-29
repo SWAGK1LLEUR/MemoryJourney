@@ -81,7 +81,7 @@ public class Enemy2tp : MonoBehaviour
         }
 
 
-        if (IsActivated && currentGazeTimeInSeconds != 0)
+        if (IsActivated && currentGazeTimeInSeconds == 0)
         {
             if(!IsCounting)
             {
@@ -99,7 +99,7 @@ public class Enemy2tp : MonoBehaviour
     private IEnumerator Tp()
     {
         IsCounting = true;
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(1);
 
         int i = FindPos();
 
