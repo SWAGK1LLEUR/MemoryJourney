@@ -820,7 +820,7 @@ Animator:
   m_GameObject: {fileID: 5580620945752480353}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9f88b8fa3d51d184ab0aa724cf66a837, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -939,7 +939,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f38e267d32cb424f846cba771fcf0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 462095526549969831, guid: a9e245fb85aae844a800dfaacacbb20b, type: 3}
+  agent: {fileID: 6253946502391995142}
   player: {fileID: 0}
   spotter: {fileID: 8784362938343420061}
   whatIsGround:
